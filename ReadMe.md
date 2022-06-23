@@ -1,5 +1,5 @@
 # Cyan's analyze_env
-My Jupyter lab environment on Python and R.  
+My Jupyter lab docker container environment on Python and R.  
 This container is available pytorch, r and opencv.  
 
 ## How to use
