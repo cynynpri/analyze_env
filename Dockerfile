@@ -10,6 +10,7 @@ RUN pyenv local 3.9.12
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install --upgrade pip && rm -rf ${HOME}/.cache/pip
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install opencv-python \
     matplotlib \
+    pandas \
     torch \
     torchvision \
     torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
