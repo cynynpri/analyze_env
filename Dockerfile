@@ -8,6 +8,9 @@ RUN pyenv local 3.9.12
 
 # no conda then.
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install --upgrade pip && rm -rf ${HOME}/.cache/pip
+# when you install all package from `requirements.txt` then, this comments in.
+#COPY requirements.txt /home/pyenv/requirements.txt
+#RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install -r /home/pyenv/requirements.txt
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install opencv-python \
     matplotlib \
     pandas \
