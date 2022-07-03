@@ -15,6 +15,7 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install opencv-python \
     umap-learn \
     torch \
     torchvision \
+    torchtext \
     torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install jupyterlab \
     jupyterlab_code_formatter \
