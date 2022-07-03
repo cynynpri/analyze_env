@@ -11,6 +11,8 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install --upgrade pip &
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install opencv-python \
     matplotlib \
     pandas \
+    scikit-learn \
+    umap-learn \
     torch \
     torchvision \
     torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
