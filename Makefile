@@ -13,7 +13,7 @@ build:
 	docker build -t $(NAME) .
  
 run:
-	docker run --gpus all --name $(NAME) -i -p $(localhost):$(host_port):$(container_port) -v $(PWD):/home/pyenv/myapp $(NAME)
+	docker run --gpus all --name $(NAME) -i -p $(localhost):$(host_port):$(container_port) -v $(PWD):/home/pyenv/work/myapp $(NAME)
 
 start:
 	docker start $(NAME)
