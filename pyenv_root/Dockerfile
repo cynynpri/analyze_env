@@ -14,6 +14,7 @@ RUN apt-get autoremove -qy
 # add settings pyenv exec env
 RUN apt-get install -qy \
     build-essential \
+    cmake \
     libssl-dev \
     zlib1g-dev \
     libbz2-dev \
@@ -28,8 +29,10 @@ RUN apt-get install -qy \
     libffi-dev \
     liblzma-dev \
     libopencv-dev \
+    nodejs \
     git
 
+# install R
 RUN apt-get install -qy wget
 RUN apt-get install -qy --no-install-recommends \
     software-properties-common dirmngr
@@ -38,6 +41,7 @@ RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc |
 RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 RUN apt install -qy --no-install-recommends r-base
 
+# clean dirs.
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
     /var/cache/apt/* \
@@ -52,7 +56,7 @@ RUN chown pyenv:pyenv -R /home/pyenv
 USER pyenv
 
 # add pyenv user.
-RUN git clone https://github.com/pyenv/pyenv.git /home/pyenv/.pyenv
+RUN git clone --depth=1 https://github.com/pyenv/pyenv.git /home/pyenv/.pyenv
 ENV PYENV_ROOT /home/pyenv/.pyenv
 ENV PATH ${PYENV_ROOT}/bin:${PATH}
 
