@@ -1,9 +1,11 @@
-FROM nvidia/cuda:11.0.3-base-ubuntu20.04
+FROM nvidia/cuda:11.0.3-devel-ubuntu20.04
 
 EXPOSE 8888
 
 # initialize
 USER root
+
+RUN perl -p -i.bak -e 's%(deb(?:-src|)\s+)https?://(?!archive\.canonical\.com|security\.ubuntu\.com)[^\s]+%$1http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%' /etc/apt/sources.list 
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Tokyo
