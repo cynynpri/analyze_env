@@ -43,26 +43,42 @@ RUN chmod 777 /home/pyenv/work/launch.sh
 RUN chown pyenv:pyenv /home/pyenv/work/launch.sh
 USER pyenv
 
-# install lightgbm
-# TODO: Fix
+# install gcc and lightgbm
 USER root
 RUN apt-get update && apt-get install -qy cmake \
     ocl-icd-opencl-dev \
     libboost-dev \
     libboost-system-dev \
-    libboost-filesystem-dev
+    libboost-filesystem-dev \
+    gcc \
+    g++ \
+    make \
+    bison \
+    binutils \
+    gcc-multilib \
+    tar \
+    libmpc-dev
+WORKDIR /tmp
+RUN curl -sSO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.1.0/gcc-11.1.0.tar.gz
+RUN tar -zxvf /tmp/gcc-11.1.0.tar.gz
+RUN mkdir /tmp/gcc-11.1.0/build
+WORKDIR /tmp/gcc-11.1.0/build
+RUN ../configure --prefix=/usr/local/gcc-11.1.0 --with-gmp --enable-languages=c,c++ --disable-multilib --program-suffix=-11.1
+RUN make -j16
+RUN make install
+
+WORKDIR /home/pyenv
+
 RUN git clone --recursive https://github.com/microsoft/LightGBM /tmp/LightGBM
 RUN mkdir /tmp/LightGBM/build
-RUN cp /tmp/LightGBM/CMakeLists.txt /tmp/LightGBM/build/
-WORKDIR /tmp/LightGBM/build
-# FIXME: This line is error.
-#RUN ls -al /usr/local/cuda/include/CL/opencl.h
+WORKDIR /tmp/LightGBM
+ENV LD_LIBRARY_PATH=/usr/local/gcc-11.1.0/lib;/usr/local/gcc-11.1.0/lib64/;${LD_LIBRARY_PATH}
 RUN cmake \
     -DUSE_GPU=1 \
     -DUSE_CUDA=1 \
     -DOpenCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so \
     -OpenCL_INCLUDE_DIR=/usr/local/cuda/include/CL/
-RUN make -j4
+RUN make -j16
 
 # clean dirs.
 RUN apt-get clean && \
