@@ -31,6 +31,8 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install jupyterlab_code
 
 USER root
 RUN R -e 'install.packages("languageserver")'
+RUN R -e 'install.packages("data.table")'
+RUN R -e 'install.packages("tidyverse")'
 USER pyenv
 
 RUN mkdir /home/pyenv/work
@@ -57,7 +59,8 @@ RUN apt-get update && apt-get install -qy cmake \
     binutils \
     gcc-multilib \
     tar \
-    libmpc-dev
+    libmpc-dev \
+    pandoc
 WORKDIR /tmp
 RUN curl -sSO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.1.0/gcc-11.1.0.tar.gz
 RUN tar -zxvf /tmp/gcc-11.1.0.tar.gz
@@ -71,14 +74,28 @@ WORKDIR /home/pyenv
 
 RUN git clone --recursive https://github.com/microsoft/LightGBM /tmp/LightGBM
 RUN mkdir /tmp/LightGBM/build
-WORKDIR /tmp/LightGBM
+WORKDIR /tmp/LightGBM/build
 ENV LD_LIBRARY_PATH=/usr/local/gcc-11.1.0/lib;/usr/local/gcc-11.1.0/lib64/;${LD_LIBRARY_PATH}
+ENV OPENCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so
+ENV OpenCL_INCLUDE_DIR=/usr/local/cuda/include/CL/
 RUN cmake \
     -DUSE_GPU=1 \
     -DUSE_CUDA=1 \
-    -DOpenCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so \
-    -OpenCL_INCLUDE_DIR=/usr/local/cuda/include/CL/
-RUN make -j16
+    -DOpenCL_LIBRARY=${OPENCL_LIBRARY} \
+    -OpenCL_INCLUDE_DIR=${OpenCL_INCLUDE_DIR} \
+    ..
+RUN make -j16 ..
+WORKDIR /tmp/LightGBM
+RUN pyenv local versions 3.9.12
+WORKDIR /tmp/LightGBM/python-package
+RUN python -m pip install --upgrade pip
+RUN python -m pip install wheel setuptools
+RUN python setup.py install --precompile
+WORKDIR /tmp/LightGBM
+RUN Rscript build_r.R -j16 \
+    --use-gpu \
+    --opencl-library=${OPENCL_LIBRARY} \
+    --opencl-include-dir=${OpenCL_INCLUDE_DIR}
 
 # clean dirs.
 RUN apt-get clean && \
