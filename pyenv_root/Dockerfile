@@ -32,22 +32,46 @@ RUN apt-get install -qy \
     liblzma-dev \
     libopencv-dev \
     nodejs \
-    git
+    git \
+    cmake \
+    ocl-icd-opencl-dev \
+    libboost-dev \
+    libboost-system-dev \
+    libboost-filesystem-dev \
+    gcc \
+    g++ \
+    make \
+    bison \
+    binutils \
+    gcc-multilib \
+    tar \
+    libmpc-dev \
+    pandoc \
+    wget
 
 # install R
-RUN apt-get install -qy wget
 RUN apt-get install -qy --no-install-recommends \
-    software-properties-common dirmngr
+    software-properties-common \
+    dirmngr
 
 RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
 RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 RUN apt install -qy --no-install-recommends r-base
 
+# add gcc.
+WORKDIR /tmp
+RUN curl -sSO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.1.0/gcc-11.1.0.tar.gz
+RUN tar -zxvf /tmp/gcc-11.1.0.tar.gz
+RUN mkdir /tmp/gcc-11.1.0/build
+WORKDIR /tmp/gcc-11.1.0/build
+RUN ../configure --prefix=/usr/local/gcc-11.1.0 --with-gmp --enable-languages=c,c++ --disable-multilib --program-suffix=-11.1
+RUN make -j16
+RUN make install
+
 # clean dirs.
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
-    /var/cache/apt/* \
-    /tmp/*
+    /var/cache/apt/*
 
 # add pyenv.
 RUN mkdir /home/pyenv
@@ -63,4 +87,3 @@ ENV PYENV_ROOT /home/pyenv/.pyenv
 ENV PATH ${PYENV_ROOT}/bin:${PATH}
 
 RUN echo 'eval "$(pyenv init -)"' >> /home/pyenv/.bashrc
-
