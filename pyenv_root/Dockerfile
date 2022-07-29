@@ -51,7 +51,11 @@ RUN apt-get install -qy \
     libxml2-dev \
     libssl-dev \
     libcurl4-openssl-dev \
-    libv8-dev
+    libv8-dev \
+    ffmpeg \
+    libasound2-dev \
+    libjack-dev \
+    portaudio19-dev
 
 # install R
 RUN apt-get install -qy --no-install-recommends \
@@ -65,7 +69,7 @@ RUN apt-get install -qy --no-install-recommends r-base
 # add gcc.
 WORKDIR /tmp
 RUN curl -sSO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.1.0/gcc-11.1.0.tar.gz
-RUN tar -zxvf /tmp/gcc-11.1.0.tar.gz
+RUN tar -zxf /tmp/gcc-11.1.0.tar.gz
 RUN mkdir /tmp/gcc-11.1.0/build
 WORKDIR /tmp/gcc-11.1.0/build
 RUN ../configure --prefix=/usr/local/gcc-11.1.0 --with-gmp --enable-languages=c,c++ --disable-multilib --program-suffix=-11.1
