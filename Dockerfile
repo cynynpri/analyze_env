@@ -9,7 +9,10 @@ RUN R -e 'install.packages("httr")'
 RUN R -e 'install.packages("tidyverse")'
 RUN R -e 'install.packages("Rcpp")'
 RUN R -e 'install.packages("inline")'
-#RUN R -e 'install.packages("rstan")'
+RUN R -e 'install.packages("lavaan")'
+RUN R -e 'install.packages("semPlot")'
+RUN R -e 'install.packages("randomForest")'
+RUN R -e 'install.packages("car")'
 USER pyenv
 
 # no conda then.
@@ -18,13 +21,34 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install --upgrade pip
 RUN rm -rf ${HOME}/.cache/pip
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     setuptools \
+    #python-rtmidi \
     opencv-python \
     matplotlib \
     pandas \
     scikit-learn \
     umap-learn \
-    torch \
+    bs4 \
+    tab2img \
+    shap \
+    lime \
+    interpret \
+    graphviz \
+    semopy \
     python-lsp-server \
+    flake8 \
+    autopep8 \
+    #magenta \
+    librosa \
+    SpeechRecognition \
+    pyaudio \
+    optuna \
+    ipywidgets \
+    xgboost \
+    catboost \
+    tensorflow \
+    tensorflow-gpu \
+    keras \
+    torch \
     torchvision \
     torchtext \
     torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
