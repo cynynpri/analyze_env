@@ -25,6 +25,8 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     opencv-python \
     matplotlib \
     pandas \
+    fugashi \
+    ipadic \
     scikit-learn \
     umap-learn \
     bs4 \
@@ -32,11 +34,13 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     shap \
     lime \
     interpret \
+    seaborn \
     graphviz \
     semopy \
     python-lsp-server \
     flake8 \
     autopep8 \
+    pydocstyle \
     #magenta \
     librosa \
     SpeechRecognition \
@@ -45,6 +49,7 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     ipywidgets \
     xgboost \
     catboost \
+    transformers \
     tensorflow \
     tensorflow-gpu \
     keras \
