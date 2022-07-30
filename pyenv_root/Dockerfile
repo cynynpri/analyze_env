@@ -83,7 +83,6 @@ RUN apt-get clean && \
     /var/cache/apt/*
 
 # add pyenv.
-ENV SHELL=/bin/bash
 RUN mkdir /home/pyenv
 RUN useradd -d /home/pyenv pyenv
 WORKDIR /home/pyenv
