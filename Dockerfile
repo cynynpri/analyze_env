@@ -13,7 +13,7 @@ RUN R -e 'install.packages("inline")'
 RUN R -e 'install.packages("lavaan")'
 RUN R -e 'install.packages("semPlot")'
 RUN R -e 'install.packages("stringr")'
-RUN R -e 'install.packages("purrr)"'
+RUN R -e 'install.packages("purrr")'
 RUN R -e 'install.packages("jsonlite")'
 RUN R -e 'install.packages("randomForest")'
 RUN R -e 'install.packages("car")'
@@ -65,6 +65,7 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     torch \
     torchvision \
     torchtext \
+    pytorch-lightning \
     torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
 
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install jupyterlab
