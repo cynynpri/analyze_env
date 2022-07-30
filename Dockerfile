@@ -88,14 +88,14 @@ RUN cmake \
     -DOpenCL_LIBRARY=${OPENCL_LIBRARY} \
     -DOpenCL_INCLUDE_DIR=${OPENCL_INCLUDE_DIR} \
     ..
-RUN make -j16
+RUN make -j$(nproc)
 WORKDIR /home/pyenv/.tmp/LightGBM
 RUN pyenv local 3.9.12
 WORKDIR /home/pyenv/.tmp/LightGBM/python-package
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python setup.py install --precompile
 WORKDIR /home/pyenv/.tmp/LightGBM
 USER root
-RUN Rscript build_r.R -j16 \
+RUN Rscript build_r.R -j$(nproc) \
     --use-gpu \
     --opencl-library=${OPENCL_LIBRARY} \
     --opencl-include-dir=${OPENCL_INCLUDE_DIR}

@@ -74,7 +74,7 @@ RUN tar -zxf /tmp/gcc-11.1.0.tar.gz
 RUN mkdir /tmp/gcc-11.1.0/build
 WORKDIR /tmp/gcc-11.1.0/build
 RUN ../configure --prefix=/usr/local/gcc-11.1.0 --with-gmp --enable-languages=c,c++ --disable-multilib --program-suffix=-11.1
-RUN make -j16
+RUN make -j$(nproc)
 RUN make install
 
 # clean dirs.
