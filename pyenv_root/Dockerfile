@@ -55,7 +55,8 @@ RUN apt-get install -qy \
     ffmpeg \
     libasound2-dev \
     libjack-dev \
-    portaudio19-dev
+    portaudio19-dev \
+    graphviz
 
 # install R
 RUN apt-get install -qy --no-install-recommends \
@@ -82,6 +83,7 @@ RUN apt-get clean && \
     /var/cache/apt/*
 
 # add pyenv.
+ENV SHELL=/bin/bash
 RUN mkdir /home/pyenv
 RUN useradd -d /home/pyenv pyenv
 WORKDIR /home/pyenv
