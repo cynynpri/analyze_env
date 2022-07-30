@@ -4,6 +4,7 @@ FROM pyenv_root
 USER root
 RUN R -e 'update.packages()'
 RUN R -e 'install.packages("languageserver")'
+RUN R -e 'install.packages("dplyr")'
 RUN R -e 'install.packages("data.table")'
 RUN R -e 'install.packages("httr")'
 RUN R -e 'install.packages("tidyverse")'
@@ -11,6 +12,9 @@ RUN R -e 'install.packages("Rcpp")'
 RUN R -e 'install.packages("inline")'
 RUN R -e 'install.packages("lavaan")'
 RUN R -e 'install.packages("semPlot")'
+RUN R -e 'install.packages("stringr")'
+RUN R -e 'install.packages("purrr)"'
+RUN R -e 'install.packages("jsonlite")'
 RUN R -e 'install.packages("randomForest")'
 RUN R -e 'install.packages("car")'
 USER pyenv
@@ -21,9 +25,12 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install --upgrade pip
 RUN rm -rf ${HOME}/.cache/pip
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     setuptools \
+    numpy \
+    cupy-cuda11x \
     #python-rtmidi \
     opencv-python \
     matplotlib \
+    japanize_matplotlib \
     pandas \
     fugashi \
     ipadic \
@@ -46,6 +53,8 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     SpeechRecognition \
     pyaudio \
     optuna \
+    econml \
+    dowhy \
     ipywidgets \
     xgboost \
     catboost \
@@ -70,14 +79,14 @@ RUN mkdir /home/pyenv/.tmp
 RUN git clone --recursive https://github.com/microsoft/LightGBM /home/pyenv/.tmp/LightGBM
 RUN mkdir /home/pyenv/.tmp/LightGBM/build
 WORKDIR /home/pyenv/.tmp/LightGBM/build
-ENV LD_LIBRARY_PATH=/usr/local/gcc-11.1.0/lib;/usr/local/gcc-11.1.0/lib64/;${LD_LIBRARY_PATH}
+ENV LD_LIBRARY_PATH=/usr/local/gcc-11.1.0/lib:/usr/local/gcc-11.1.0/lib64/:${LD_LIBRARY_PATH}
 ENV OPENCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so
-ENV OpenCL_INCLUDE_DIR=/usr/local/cuda/include/CL/
+ENV OPENCL_INCLUDE_DIR=/usr/local/cuda/include/CL/
 RUN cmake \
     -DUSE_GPU=1 \
     -DUSE_CUDA=1 \
     -DOpenCL_LIBRARY=${OPENCL_LIBRARY} \
-    -OpenCL_INCLUDE_DIR=${OpenCL_INCLUDE_DIR} \
+    -DOpenCL_INCLUDE_DIR=${OPENCL_INCLUDE_DIR} \
     ..
 RUN make -j16
 WORKDIR /home/pyenv/.tmp/LightGBM
@@ -89,7 +98,7 @@ USER root
 RUN Rscript build_r.R -j16 \
     --use-gpu \
     --opencl-library=${OPENCL_LIBRARY} \
-    --opencl-include-dir=${OpenCL_INCLUDE_DIR}
+    --opencl-include-dir=${OPENCL_INCLUDE_DIR}
 USER pyenv
 
 # add jupyter lab launch script and add workdir.
