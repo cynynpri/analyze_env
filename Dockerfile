@@ -17,6 +17,8 @@ RUN R -e 'install.packages("purrr")'
 RUN R -e 'install.packages("jsonlite")'
 RUN R -e 'install.packages("randomForest")'
 RUN R -e 'install.packages("car")'
+RUN R -e 'install.packages("rstan")'
+RUN R -e 'install.packages("ggcorrplot")'
 USER pyenv
 
 # no conda then.
