@@ -2,8 +2,8 @@
 My Jupyter lab docker container environment on Python and R.  
 This container is available pytorch, r and opencv.  
 
-## Requirement
-Get cudnn tar file first.  
+## Requirements
+Get `CUDA` and `Docker` and `cuDNN_tar-file` first.  
 The cudnn tar files should be placed in the cloned directory of this repository.  
 This Dockerfile has been tested on Windows WSL2 and Ubuntu(20.04 and 22.04).  
   
