@@ -19,6 +19,12 @@ RUN R -e 'install.packages("randomForest")'
 RUN R -e 'install.packages("car")'
 RUN R -e 'install.packages("rstan")'
 RUN R -e 'install.packages("ggcorrplot")'
+
+# get cudnn
+RUN curl -sSO https://developer.nvidia.com/compute/cudnn/secure/8.4.1/local_installers/11.6/cudnn-local-repo-ubuntu2004-8.4.1.50_1.0-1_amd64.deb /tmp/cudnn-local-repo-ubuntu2004-8.4.1.50_1.0-1_amd64.deb
+RUN apt-get install -y ./tmp/cudnn-local-repo-ubuntu2004-8.4.1.50_1.0-1_amd64.deb
+
+# change user
 USER pyenv
 
 # no conda then.
@@ -63,6 +69,7 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     transformers \
     tensorflow \
     tensorflow-gpu \
+    tensorflow-addons \
     keras \
     torch \
     torchvision \
