@@ -1,5 +1,5 @@
 .vscode*
 *.log
-*.tar.gz
+*.tar.*
 requirements.txt
 *.deb
