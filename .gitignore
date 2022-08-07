@@ -2,3 +2,4 @@
 *.log
 *.tar.gz
 requirements.txt
+*.deb
