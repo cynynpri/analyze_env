@@ -22,8 +22,12 @@ RUN R -e 'install.packages("ggcorrplot")'
 
 # get cudnn
 WORKDIR /tmp
-RUN curl -sSO https://developer.nvidia.com/compute/cudnn/secure/8.4.1/local_installers/11.6/cudnn-local-repo-ubuntu2004-8.4.1.50_1.0-1_amd64.deb
-RUN apt-get install -y ./tmp/cudnn-local-repo-ubuntu2004-8.4.1.50_1.0-1_amd64.deb
+#RUN curl -sSO https://developer.nvidia.com/compute/cudnn/secure/8.4.1/local_installers/11.6/cudnn-local-repo-ubuntu2004-8.4.1.50_1.0-1_amd64.deb
+COPY cudnn-linux-x86_64-8.4.1.50_cuda11.6-archive.tar.xz /tmp/cudnn-linux-x86_64-8.4.1.50_cuda11.6-archive.tar.xz
+#RUN apt-get install -y ./tmp/cudnn-local-repo-ubuntu2004-8.4.1.50_1.0-1_amd64.deb
+RUN cp cudnn-*-archive/include/cudnn*.h /usr/local/cuda/include
+RUN cp -P cudnn-*-archive/lib/libcudnn* /usr/local/cuda/lib64 
+RUN chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
 WORKDIR /home/pyenv
 
 # change user
