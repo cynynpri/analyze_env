@@ -80,6 +80,8 @@ RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     tensorflow-gpu \
     tensorflow-addons \
     keras \
+    gpyopt \
+    #pycaret \
     torch \
     torchvision \
     torchtext \
