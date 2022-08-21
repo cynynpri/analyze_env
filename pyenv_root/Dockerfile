@@ -38,6 +38,9 @@ RUN apt-get install -qy \
     libboost-dev \
     libboost-system-dev \
     libboost-filesystem-dev \
+    libboost-all-dev \
+    clinfo \
+    opencl-headers \
     gcc \
     g++ \
     make \
