@@ -121,7 +121,7 @@ RUN Rscript build_r.R -j$(nproc) \
     --opencl-library=${OPENCL_LIBRARY} \
     --opencl-include-dir=${OPENCL_INCLUDE_DIR}
 # FYI: https://www.kaggle.com/code/kirankunapuli/ieee-fraud-lightgbm-with-gpu/notebook
-RUN mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+RUN mkdir -p /etc/OpenCL/vendors && echo "/usr/local/cuda/lib64/libOpenCL.so.1" > /etc/OpenCL/vendors/nvidia.icd
 USER pyenv
 
 # add jupyter lab launch script and add workdir.
