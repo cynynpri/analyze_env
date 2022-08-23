@@ -5,7 +5,7 @@ This container is available pytorch, r and opencv.
 ## Requirements
 Get `CUDA` and `Docker` and `cuDNN_tar-file` first.  
 The cudnn tar files should be placed in the cloned directory of this repository.  
-This Dockerfile has been tested on Windows WSL2 and Ubuntu(20.04 and 22.04).  
+This Dockerfile has been tested on <s>Windows WSL2</s>(Please, check [this issue](https://github.com/cynynpri/analytical_env/issues/1).) and Ubuntu(20.04 and 22.04).  
   
 ## How to use
 ### Installation.  
