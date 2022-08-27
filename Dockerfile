@@ -131,7 +131,6 @@ WORKDIR /home/pyenv/.tmp/LightGBM/python-package
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python setup.py install --precompile
 WORKDIR /home/pyenv/.tmp/LightGBM
 USER root
-# FYI: https://www.kaggle.com/code/kirankunapuli/ieee-fraud-lightgbm-with-gpu/notebook
 RUN Rscript build_r.R \
     --use-gpu \
     --opencl-library=${OPENCL_LIBRARY} \
