@@ -113,7 +113,7 @@ RUN pyenv install 3.9.12 && \
 
 # install lightgbm
 RUN mkdir /home/pyenv/.tmp && \
-    git clone --recursive --switch stable --depth=1 https://github.com/microsoft/LightGBM /home/pyenv/.tmp/LightGBM && \
+    git clone --recursive --branch stable --depth=1 https://github.com/microsoft/LightGBM /home/pyenv/.tmp/LightGBM && \
     mkdir /home/pyenv/.tmp/LightGBM/build
 WORKDIR /home/pyenv/.tmp/LightGBM/build
 ENV LD_LIBRARY_PATH=/usr/local/gcc-11.1.0/lib:/usr/local/gcc-11.1.0/lib64/:${LD_LIBRARY_PATH}
