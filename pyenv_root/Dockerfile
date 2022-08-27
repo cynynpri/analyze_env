@@ -73,11 +73,11 @@ RUN apt-get install -qy --no-install-recommends \
     apt-get install -qy --no-install-recommends r-base r-base-dev
 
 # add gcc.
-WORKDIR /tmp
+WORKDIR /usr/local/src
 RUN curl -sSO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.1.0/gcc-11.1.0.tar.gz && \
-    tar -zxf /tmp/gcc-11.1.0.tar.gz && \
-    mkdir /tmp/gcc-11.1.0/build
-WORKDIR /tmp/gcc-11.1.0/build
+    tar -zxf /usr/local/src/gcc-11.1.0.tar.gz && \
+    mkdir /usr/local/src/gcc-11.1.0/build
+WORKDIR /usr/local/src/gcc-11.1.0/build
 RUN ../configure --prefix=/usr/local/gcc-11.1.0 --with-gmp --enable-languages=c,c++ --disable-multilib --program-suffix=-11.1 && \
     make -j$(nproc) && \
     make install

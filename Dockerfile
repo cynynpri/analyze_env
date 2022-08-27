@@ -132,12 +132,19 @@ WORKDIR /home/pyenv/.tmp/LightGBM/python-package
 RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python setup.py install --precompile
 WORKDIR /home/pyenv/.tmp/LightGBM
 USER root
-RUN Rscript build_r.R -j$(nproc) \
+# FYI: https://www.kaggle.com/code/kirankunapuli/ieee-fraud-lightgbm-with-gpu/notebook
+RUN Rscript build_r.R \
     --use-gpu \
     --opencl-library=${OPENCL_LIBRARY} \
+<<<<<<< HEAD
     --opencl-include-dir=${OPENCL_INCLUDE_DIR} && \
     mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 # FYI: https://www.kaggle.com/code/kirankunapuli/ieee-fraud-lightgbm-with-gpu/notebook
+=======
+    --opencl-include-dir=${OPENCL_INCLUDE_DIR}
+RUN mkdir -p /etc/OpenCL/vendors && \
+    echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+>>>>>>> feature
 USER pyenv
 
 # add jupyter lab launch script and add workdir.
