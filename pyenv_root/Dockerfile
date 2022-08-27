@@ -1,17 +1,16 @@
-FROM nvidia/cuda:11.7.0-cudnn8-devel-ubuntu22.04
+FROM nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
 
 EXPOSE 8888
 
 # initialize
 USER root
 
-RUN perl -p -i.bak -e 's%(deb(?:-src|)\s+)https?://(?!archive\.canonical\.com|security\.ubuntu\.com)[^\s]+%$1http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%' /etc/apt/sources.list 
-
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Tokyo
-RUN apt-get update
-RUN apt-get upgrade -qy
-RUN apt-get autoremove -qy
+RUN perl -p -i.bak -e 's%(deb(?:-src|)\s+)https?://(?!archive\.canonical\.com|security\.ubuntu\.com)[^\s]+%$1http://ftp.jaist.ac.jp/pub/Linux/ubuntu/%' /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get upgrade -qy && \
+    apt-get autoremove -qy
 
 # add settings pyenv exec env
 RUN apt-get install -qy \
@@ -64,21 +63,20 @@ RUN apt-get install -qy \
 # install R
 RUN apt-get install -qy --no-install-recommends \
     software-properties-common \
-    dirmngr
-
-RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
-RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
-RUN apt-get install -qy --no-install-recommends r-base r-base-dev
+    dirmngr && \
+    wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc && \
+    add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" && \
+    apt-get install -qy --no-install-recommends r-base r-base-dev
 
 # add gcc.
-WORKDIR /tmp
-RUN curl -sSO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.1.0/gcc-11.1.0.tar.gz
-RUN tar -zxf /tmp/gcc-11.1.0.tar.gz
-RUN mkdir /tmp/gcc-11.1.0/build
-WORKDIR /tmp/gcc-11.1.0/build
-RUN ../configure --prefix=/usr/local/gcc-11.1.0 --with-gmp --enable-languages=c,c++ --disable-multilib --program-suffix=-11.1
-RUN make -j$(nproc)
-RUN make install
+WORKDIR /usr/local/src
+RUN curl -sSO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.1.0/gcc-11.1.0.tar.gz && \
+    tar -zxf /usr/local/src/gcc-11.1.0.tar.gz && \
+    mkdir /usr/local/src/gcc-11.1.0/build
+WORKDIR /usr/local/src/gcc-11.1.0/build
+RUN ../configure --prefix=/usr/local/gcc-11.1.0 --with-gmp --enable-languages=c,c++ --disable-multilib --program-suffix=-11.1 && \
+    make -j$(nproc) && \
+    make install
 
 # clean dirs.
 RUN apt-get clean && \
@@ -86,8 +84,8 @@ RUN apt-get clean && \
     /var/cache/apt/*
 
 # add pyenv.
-RUN mkdir /home/pyenv
-RUN useradd -d /home/pyenv pyenv
+RUN mkdir /home/pyenv && \
+    useradd -d /home/pyenv pyenv
 WORKDIR /home/pyenv
 ENV HOME /home/pyenv
 RUN chown pyenv:pyenv -R /home/pyenv
