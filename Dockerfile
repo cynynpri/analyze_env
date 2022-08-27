@@ -116,9 +116,8 @@ RUN mkdir /home/pyenv/.tmp && \
     git clone --recursive --branch stable --depth=1 https://github.com/microsoft/LightGBM /home/pyenv/.tmp/LightGBM && \
     mkdir /home/pyenv/.tmp/LightGBM/build
 WORKDIR /home/pyenv/.tmp/LightGBM/build
-ENV LD_LIBRARY_PATH=/usr/local/gcc-11.1.0/lib:/usr/local/gcc-11.1.0/lib64/:${LD_LIBRARY_PATH}
-ENV OPENCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so
-ENV OPENCL_INCLUDE_DIR=/usr/local/cuda/include/CL/
+ENV OPENCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so.1
+ENV OPENCL_INCLUDE_DIR=/usr/local/cuda/include/
 RUN cmake \
     -DUSE_GPU=1 \
     -DUSE_CUDA=1 \
