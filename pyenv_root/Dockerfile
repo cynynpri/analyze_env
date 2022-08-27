@@ -22,6 +22,10 @@ RUN apt-get install -qy \
     libbz2-dev \
     libreadline-dev \
     libsqlite3-dev \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    libudunits2-dev \
+    libgdal-dev \
     curl \
     llvm \
     libncursesw5-dev \
