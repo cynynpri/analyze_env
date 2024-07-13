@@ -47,8 +47,8 @@ RUN pyenv install 3.9.12 && \
     /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install --upgrade pip && \
     /home/pyenv/.pyenv/versions/3.9.12/bin/python -m pip install wheel \
     setuptools \
-    numpy \
-    cupy-cuda11x \
+    #numpy \
+    #cupy-cuda12x \
     #python-rtmidi \
     opencv-python \
     matplotlib \
@@ -60,12 +60,12 @@ RUN pyenv install 3.9.12 && \
     fugashi \
     ipadic \
     scikit-learn \
-    umap-learn \
+    #umap-learn \
     bs4 \
     tab2img \
-    feather \
+    #feather \
     shap \
-    lime \
+    #lime \
     interpret \
     seaborn \
     graphviz \
@@ -77,17 +77,17 @@ RUN pyenv install 3.9.12 && \
     pydocstyle \
     #magenta \
     librosa \
-    SpeechRecognition \
+    #SpeechRecognition \
     pyaudio \
     optuna \
-    econml \
-    dowhy \
+    #econml \
+    #dowhy \
     ipywidgets \
     xgboost \
     catboost \
     transformers \
     tensorflow \
-    tensorflow-gpu \
+    #tensorflow-gpu \
     tensorflow-addons \
     keras \
     gpyopt \
@@ -96,7 +96,7 @@ RUN pyenv install 3.9.12 && \
     torchvision \
     torchtext \
     pytorch-lightning \
-    torchaudio --extra-index-url https://download.pytorch.org/whl/cu117 \
+    torchaudio \
     jupyterlab \
     'jupyterlab>=3.0.0,<4.0.0a0' jupyterlab-lsp \
     jupyterlab_code_formatter \
@@ -112,25 +112,29 @@ WORKDIR /home/pyenv/.tmp/LightGBM/build
 ENV OPENCL_LIBRARY=/usr/local/cuda/lib64/libOpenCL.so.1
 ENV OPENCL_INCLUDE_DIR=/usr/local/cuda/include/
 RUN cmake \
+    -B build \
+    -S . \
     -DUSE_GPU=1 \
     -DUSE_CUDA=1 \
     -DOpenCL_LIBRARY=${OPENCL_LIBRARY} \
     -DOpenCL_INCLUDE_DIR=${OPENCL_INCLUDE_DIR} \
     .. && \
-    make -j$(nproc)
+    cmake --build build -j$(nproc)
 WORKDIR /home/pyenv/.tmp/LightGBM
 RUN pyenv local 3.9.12
-WORKDIR /home/pyenv/.tmp/LightGBM/python-package
-RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python setup.py install --precompile
+ENV PATH=${PATH}:/home/pyenv/.pyenv/versions/3.9.12/bin
+#WORKDIR /home/pyenv/.tmp/LightGBM/python-package
+#RUN /home/pyenv/.pyenv/versions/3.9.12/bin/python setup.py install --precompile
+RUN sh ./build-python.sh install --precompile
 WORKDIR /home/pyenv/.tmp/LightGBM
-USER root
-RUN Rscript build_r.R \
-    --use-gpu \
-    --opencl-library=${OPENCL_LIBRARY} \
-    --opencl-include-dir=${OPENCL_INCLUDE_DIR} && \
-    mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+#USER root
+#RUN Rscript build_r.R \
+#    --use-gpu \
+#    --opencl-library=${OPENCL_LIBRARY} \
+#    --opencl-include-dir=${OPENCL_INCLUDE_DIR} && \
+#    mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 # FYI: https://www.kaggle.com/code/kirankunapuli/ieee-fraud-lightgbm-with-gpu/notebook
-USER pyenv
+#USER pyenv
 
 # add jupyter lab launch script and add workdir.
 RUN mkdir /home/pyenv/work
